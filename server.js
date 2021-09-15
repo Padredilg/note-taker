@@ -1,3 +1,20 @@
+const express = require('express');
+const PORT = process.env.PORT || 3001;
+const app = express();
+const path = require('path');
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// GET /api/users/1
+app.get('/', (req, res) => {
+	res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`);
+});
+
 /*Following HTML routes must be created*/
 //GET /notes returns notes.html
 
@@ -11,6 +28,7 @@
 
 //DELETE /api/notes/:id receives query param containing id
 //remove note with given id and rewrite db.json
+
 
 
 /*
