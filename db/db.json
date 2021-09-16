@@ -1,6 +1,19 @@
-[
+{
+  "notesDb": [
     {
-        "title":"Test Title",
-        "text":"Test text"
+      "title": "test",
+      "text": "Testing",
+      "id": "1"
+    },
+    {
+      "title": "test2",
+      "text": "Testing again",
+      "id": "2"
+    },
+    {
+      "title": "ff",
+      "text": "ffffff",
+      "id": "707bsa9jgktnbu0ww"
     }
-]
+  ]
+}

@@ -1,35 +1,59 @@
 const router = require('express').Router();
-const notesFunctions = require('../../public/assets/js/index.js');
-const db = require('../../db/db.json')
+const path = require("path");
+const fs = require("fs");
+const { notesDb } = require('../../db/db.json');
+const uniqid = require('uniqid');
 
 //GET /api/notes
 router.get('/notes', (req, res) => {
-    //read the db.json file and 
-    //return all saved notes as JSON.
-    //probably link this route with the function that renders all notes
+    res.json(notesDb);
 });
 
 // POST /api/notes
 router.post('/notes', (req, res) => {
-    /*
-    should receive a new note to save on the 
-    request body, add it to the db.json file, 
-    I believe it should add the note when save button is clicked
-    and then return the new note to the client.
-    */
+    let note = {
+        title: req.body.title,
+        text: req.body.text,
+        id: uniqid()//use uniqid to generate id
+    }
+    //notesDb in here is an array that holds the value of db.json
+    //without altering it
+    notesDb.push(note);
 
-    //this will post to the db, so db must be required
+    //rewrite db.json with the updated notesDb
+    fs.writeFileSync(
+        //path to the db.json file that will be rewritten
+        path.join(__dirname, '../../db/db.json'),
+        JSON.stringify({ notesDb }, null, 2)
+    );
+
+    res.json(note);
 });
 
 // DELETE /notes/:id
-router.delete('/:id', (req, res) => {
-    /*
-    receive a query parameter containing the id 
-    of a note to delete. In order to delete a note, 
-    you'll need to read all notes from the db.json file, 
-    remove the note with the given id property, and then 
-    rewrite the notes to the db.json file
-    */
+router.delete('/notes/:id', (req, res) => {
+    //perhaps get the id in a variable
+    const id = req.params.id;
+
+    let newDb = [];
+
+    //write loop to copy each element of notesDb in new array
+    //dont copy/push if id is the same
+    for(let i=0; i<notesDb.length; i++){
+        if(id !== notesDb[i].id){
+            newDb.push(notesDb[i]);
+        }
+    }
+
+    //rewrite notesDb
+    fs.writeFileSync(
+        //path to the db.json file that will be rewritten
+        path.join(__dirname, '../../db/db.json'),
+        JSON.stringify({ notesDb: newDb }, null, 2)
+    );
+
+    res.json(notesDb);
+    console.log(newDb);
 });
 
 module.exports = router;
