@@ -2,34 +2,25 @@ const express = require('express');
 const PORT = process.env.PORT || 3001;
 const app = express();
 const path = require('path');
+const apiRoutes = require('./routes/api');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
-// GET /api/users/1
-app.get('/', (req, res) => {
+app.use('/api', apiRoutes);
+
+app.get('/notes', (req, res) => {
+	res.sendFile(path.join(__dirname, './public/notes.html'));
+});
+
+app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, './public/index.html'));
 });
 
 app.listen(PORT, () => {
     console.log(`API server now on port ${PORT}!`);
 });
-
-/*Following HTML routes must be created*/
-//GET /notes returns notes.html
-
-//GET* returns index.html
-
-/*Following API routes must be created*/
-//GET /api/notes reads db.json and returns all saved notes
-
-//POST /api/notes receives new note, add to db.json, and return it to client
-//give each note a unique id - find npm package that does this
-
-//DELETE /api/notes/:id receives query param containing id
-//remove note with given id and rewrite db.json
-
-
 
 /*
 	AS A small business owner
