@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const path = require("path");
 const fs = require("fs");
-const { notesDb } = require('../../db/db.json');
+let { notesDb } = require('../../db/db.json');
 const uniqid = require('uniqid');
 
 //GET /api/notes
@@ -45,6 +45,8 @@ router.delete('/notes/:id', (req, res) => {
         }
     }
 
+    notesDb = newDb;
+
     //rewrite notesDb
     fs.writeFileSync(
         //path to the db.json file that will be rewritten
@@ -53,7 +55,6 @@ router.delete('/notes/:id', (req, res) => {
     );
 
     res.json(notesDb);
-    console.log(newDb);
 });
 
 module.exports = router;
